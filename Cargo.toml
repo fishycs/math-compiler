@@ -1,5 +1,5 @@
 [package]
-name = "complex_calc"
+name = "math-compiler-command-line"
 version = "0.1.0"
 authors = ["Ethan Fisher <fivemileview@gmail.com>"]
 edition = "2018"
