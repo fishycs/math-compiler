@@ -378,7 +378,7 @@ impl<'t> Token<'t> {
     pub(crate) fn new_min(name: &'t str) -> Self {
 	return Token::UnfixedFunc{args: {
 	    let mut args: HashMap<usize, usize> = HashMap::new();
-	    args.insert(1, FUNC_MIN);
+	    args.insert(2, FUNC_MIN);
 	    args
 	}, name: name};
     }
