@@ -1,10 +1,8 @@
-#[allow(unused_imports)]
 use std::convert::From;
-use std::f64::{consts::PI, NAN}; // TAU is experimental.
+use std::f64::NAN; // TAU is experimental.
 use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::num::Wrapping;
-use std::mem::size_of;
 
 pub(crate) const TAU: f64 = 6.28318530717958647692528676655900;
 
