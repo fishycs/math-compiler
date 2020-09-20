@@ -132,37 +132,6 @@ pub(crate) const PREC_POW: usize = 5;
 
 const MAX_ITERATIONS: u64 = 9007199254740992; // 2**53 = 2**(f64 mantissa bits + 1); integers larger than this cannot necessarily be exactly represented as an f64.
 
-//const ERROR_NO_EQUATION: &str = "no equation";
-//const ERROR_UNKNOWN_TOKEN: &str = "unknown token \"{}\"";
-//const ERROR_INVALID_NUMBER: &str = "invalid number \"{}\"";
-//const ERROR_MISMATCHED_PARENTHESES: &str = "mismatched parentheses";
-//const ERROR_EMPTY_ARGUMENT: &str = "empty argument";
-//const ERROR_PARENTHESES_ARGUMENT: &str = "parentheses must have 1 argument";
-//const ERROR_FUNC_NO_LEFT_PARENTHESIS: &str = "a left parenthesis must follow \"{}\"";
-//const ERROR_NONE: &str = "";
-//const ERROR_NO_PREFIX_VALUE: &str = "a value must succeed a prefix operator";
-//const ERROR_NO_INFIX_VALUE: &str = "a value must preceed and succeed an infix operator";
-//const ERROR_NO_POSTFIX_VALUE: &str = "a value must preceed a postfix operator";
-//const ERROR_MISMATCHED_CURLIES: &str = "mismatched curlies";
-//const ERROR_CURLIES_ARGUMENT: &str = "curlies must have 2 or 3 arguments";
-//const ERROR_IF_NO_CURLY: &str = "an if statement must be within curlies";
-//const ERROR_ELSE_NO_IF: &str = "an else statement must correspond to an if statement";
-//const ERROR_DEF_AT_NO_NAME: &str = "a unique and original definition name must follow an \"@\"";
-//const ERROR_DEF_OUT_OF_SCOPE: &str = "definition \"{}\" is out of scope";
-//const ERROR_DUPLICATE_DEF: &str = "duplicate definition \"{}\"";
-//const ERROR_DEF_PARENTHESES: &str = "definitions must be directly inside parentheses or the equation";
-//const ERROR_DEF_NO_ASSIGN: &str = "an assignment operator ['='] must follow the definition {}";
-//const ERROR_ADJACENT_VALUES: &str = "values cannot be adjacent";
-//const ERROR_LONE_ASSIGN: &str = "lone assignment not to a definition";
-//const ERROR_END_CAN_ONLY_FOLLOW_ASSIGN_TO_DEF: &str = "\";\" can only be placed after assignment to a definition";
-//const ERROR_EMPTY_ASSIGNMENT: &str = "empty assignment";
-//const ERROR_NO_ITER_VAR: &str = "a unique name for the iter variable must follow a \"[\"";
-//const ERROR_NO_ITER_COMMA: &str = "a comma must follow the iter variable";
-//const ERROR_NO_ITER_COUNT_VAR: &str = "a unique name for the iter count variable must be the next argument after the iter variable";
-//const ERROR_NO_ITER_COMMA_2: &str = "a comma must follow the iter count variable";
-//const ERROR_BRACKETS_ARGUMENT: &str = "brackets must have 5 arguments";
-//const ERROR_MISMATCHED_BRACKETS: &str = "mismatched brackets";
-
 const SYMBOL_TYPE_NONE: u8 = 0;
 const SYMBOL_TYPE_NUMBER: u8 = 1;
 const SYMBOL_TYPE_LETTER: u8 = 2;
