@@ -5,7 +5,7 @@ use crate::token::Token;
 
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::f64::{consts::{E, PI}, INFINITY, NAN};
-use std::mem::{discriminant, size_of};
+use std::mem::size_of;
 use unicode_segmentation::UnicodeSegmentation;
 
 pub(crate) const INSTR_STORE: u8 = 0;
@@ -15,54 +15,52 @@ pub(crate) const INSTR_MUL: u8 = 3;
 pub(crate) const INSTR_DIV: u8 = 4;
 pub(crate) const INSTR_NEG: u8 = 5;
 pub(crate) const INSTR_POW: u8 = 6;
-pub(crate) const INSTR_POWN: u8 = 7;
-pub(crate) const INSTR_EXP: u8 = 8;
-pub(crate) const INSTR_LN1: u8 = 9;
-pub(crate) const INSTR_SIN: u8 = 10;
-pub(crate) const INSTR_COS: u8 = 11;
-pub(crate) const INSTR_TAN: u8 = 12;
-pub(crate) const INSTR_SQRT: u8 = 13;
-pub(crate) const INSTR_ASIN: u8 = 14;
-pub(crate) const INSTR_ACOS: u8 = 15;
-pub(crate) const INSTR_ATAN: u8 = 16;
-pub(crate) const INSTR_SINH: u8 = 17;
-pub(crate) const INSTR_COSH: u8 = 18;
-pub(crate) const INSTR_TANH: u8 = 19;
-pub(crate) const INSTR_ASINH: u8 = 20;
-pub(crate) const INSTR_ACOSH: u8 = 21;
-pub(crate) const INSTR_ATANH: u8 = 22;
-pub(crate) const INSTR_ARG: u8 = 23;
-pub(crate) const INSTR_ABS: u8 = 24;
-pub(crate) const INSTR_RE: u8 = 25;
-pub(crate) const INSTR_IM: u8 = 26;
-pub(crate) const INSTR_CONJ: u8 = 27;
-pub(crate) const INSTR_CEIL: u8 = 28;
-pub(crate) const INSTR_FLOOR: u8 = 29;
-pub(crate) const INSTR_ROUND: u8 = 30;
-pub(crate) const INSTR_RECIP: u8 = 31;
-pub(crate) const INSTR_LOG2: u8 = 32;
-pub(crate) const INSTR_LOG3: u8 = 33;
-pub(crate) const INSTR_LN2: u8 = 34;
-pub(crate) const INSTR_ITER: u8 = 35;
-pub(crate) const INSTR_ITER_STORE: u8 = 36;
-pub(crate) const INSTR_READ: u8 = 37;
-pub(crate) const INSTR_ITER_COUNT: u8 = 38;
-pub(crate) const INSTR_ITER_TEST: u8 = 39;
-pub(crate) const INSTR_MAX: u8 = 40;
-pub(crate) const INSTR_MIN: u8 = 41;
-pub(crate) const INSTR_JUMP: u8 = 42;
-pub(crate) const INSTR_JUMP_IF_NOT: u8 = 43;
-pub(crate) const INSTR_EQUAL: u8 = 44;
-pub(crate) const INSTR_NOT_EQUAL: u8 = 45;
-pub(crate) const INSTR_GREATER: u8 = 46;
-pub(crate) const INSTR_LESS: u8 = 47;
-pub(crate) const INSTR_GREATER_OR_EQUAL: u8 = 48;
-pub(crate) const INSTR_LESS_OR_EQUAL: u8 = 49;
-pub(crate) const INSTR_AND: u8 = 50;
-pub(crate) const INSTR_OR: u8 = 51;
-pub(crate) const INSTR_NOT: u8 = 52;
-pub(crate) const INSTR_READ_REL: u8 = 53;
-pub(crate) const INSTR_STACK_SUB: u8 = 54;
+pub(crate) const INSTR_EXP: u8 = 7;
+pub(crate) const INSTR_LN1: u8 = 8;
+pub(crate) const INSTR_SIN: u8 = 9;
+pub(crate) const INSTR_COS: u8 = 10;
+pub(crate) const INSTR_TAN: u8 = 11;
+pub(crate) const INSTR_SQRT: u8 = 12;
+pub(crate) const INSTR_ASIN: u8 = 13;
+pub(crate) const INSTR_ACOS: u8 = 14;
+pub(crate) const INSTR_ATAN: u8 = 15;
+pub(crate) const INSTR_SINH: u8 = 16;
+pub(crate) const INSTR_COSH: u8 = 17;
+pub(crate) const INSTR_TANH: u8 = 18;
+pub(crate) const INSTR_ASINH: u8 = 19;
+pub(crate) const INSTR_ACOSH: u8 = 20;
+pub(crate) const INSTR_ATANH: u8 = 21;
+pub(crate) const INSTR_ARG: u8 = 22;
+pub(crate) const INSTR_ABS: u8 = 23;
+pub(crate) const INSTR_RE: u8 = 24;
+pub(crate) const INSTR_IM: u8 = 25;
+pub(crate) const INSTR_CONJ: u8 = 26;
+pub(crate) const INSTR_CEIL: u8 = 27;
+pub(crate) const INSTR_FLOOR: u8 = 28;
+pub(crate) const INSTR_ROUND: u8 = 29;
+pub(crate) const INSTR_RECIP: u8 = 30;
+pub(crate) const INSTR_LOG2: u8 = 31;
+pub(crate) const INSTR_LOG3: u8 = 32;
+pub(crate) const INSTR_LN2: u8 = 33;
+pub(crate) const INSTR_ITER: u8 = 34;
+pub(crate) const INSTR_READ: u8 = 35;
+pub(crate) const INSTR_WRITE: u8 = 36;
+pub(crate) const INSTR_ITER_TEST: u8 = 37;
+pub(crate) const INSTR_MAX: u8 = 38;
+pub(crate) const INSTR_MIN: u8 = 39;
+pub(crate) const INSTR_JUMP: u8 = 40;
+pub(crate) const INSTR_JUMP_IF_NOT: u8 = 41;
+pub(crate) const INSTR_EQUAL: u8 = 42;
+pub(crate) const INSTR_NOT_EQUAL: u8 = 43;
+pub(crate) const INSTR_GREATER: u8 = 44;
+pub(crate) const INSTR_LESS: u8 = 45;
+pub(crate) const INSTR_GREATER_OR_EQUAL: u8 = 46;
+pub(crate) const INSTR_LESS_OR_EQUAL: u8 = 47;
+pub(crate) const INSTR_AND: u8 = 48;
+pub(crate) const INSTR_OR: u8 = 49;
+pub(crate) const INSTR_NOT: u8 = 50;
+pub(crate) const INSTR_STACK_SUB: u8 = 51;
+//pub(crate) const INSTR_READ_REL: u8 = 52;
 
 pub(crate) const FUNC_ADD: usize = 1;
 pub(crate) const FUNC_SUB: usize = 2;
@@ -70,45 +68,58 @@ pub(crate) const FUNC_MUL: usize = 3;
 pub(crate) const FUNC_DIV: usize = 4;
 pub(crate) const FUNC_NEG: usize = 5;
 pub(crate) const FUNC_POW: usize = 6;
-pub(crate) const FUNC_POWN: usize = 7;
-pub(crate) const FUNC_EXP: usize = 8;
-pub(crate) const FUNC_LN1: usize = 9;
-pub(crate) const FUNC_SIN: usize = 10;
-pub(crate) const FUNC_COS: usize = 11;
-pub(crate) const FUNC_TAN: usize = 12;
-pub(crate) const FUNC_SQRT: usize = 13;
-pub(crate) const FUNC_ASIN: usize = 14;
-pub(crate) const FUNC_ACOS: usize = 15;
-pub(crate) const FUNC_ATAN: usize = 16;
-pub(crate) const FUNC_SINH: usize = 17;
-pub(crate) const FUNC_COSH: usize = 18;
-pub(crate) const FUNC_TANH: usize = 19;
-pub(crate) const FUNC_ASINH: usize = 20;
-pub(crate) const FUNC_ACOSH: usize = 21;
-pub(crate) const FUNC_ATANH: usize = 22;
-pub(crate) const FUNC_ARG: usize = 23;
-pub(crate) const FUNC_ABS: usize = 24;
-pub(crate) const FUNC_RE: usize = 25;
-pub(crate) const FUNC_IM: usize = 26;
-pub(crate) const FUNC_CONJ: usize = 27;
-pub(crate) const FUNC_CEIL: usize = 28;
-pub(crate) const FUNC_FLOOR: usize = 29;
-pub(crate) const FUNC_ROUND: usize = 30;
-pub(crate) const FUNC_RECIP: usize = 31;
-pub(crate) const FUNC_LOG2: usize = 32;
-pub(crate) const FUNC_LOG3: usize = 33;
-pub(crate) const FUNC_LN2: usize = 34;
-pub(crate) const FUNC_MAX: usize = 40;
-pub(crate) const FUNC_MIN: usize = 41;
-pub(crate) const FUNC_EQUAL: usize = 44;
-pub(crate) const FUNC_NOT_EQUAL: usize = 45;
-pub(crate) const FUNC_GREATER: usize = 46;
-pub(crate) const FUNC_LESS: usize = 47;
-pub(crate) const FUNC_GREATER_OR_EQUAL: usize = 48;
-pub(crate) const FUNC_LESS_OR_EQUAL: usize = 49;
-pub(crate) const FUNC_AND: usize = 50;
-pub(crate) const FUNC_OR: usize = 51;
-pub(crate) const FUNC_NOT: usize = 52;
+pub(crate) const FUNC_EXP: usize = 7;
+pub(crate) const FUNC_LN1: usize = 8;
+pub(crate) const FUNC_SIN: usize = 9;
+pub(crate) const FUNC_COS: usize = 10;
+pub(crate) const FUNC_TAN: usize = 11;
+pub(crate) const FUNC_SQRT: usize = 12;
+pub(crate) const FUNC_ASIN: usize = 13;
+pub(crate) const FUNC_ACOS: usize = 14;
+pub(crate) const FUNC_ATAN: usize = 15;
+pub(crate) const FUNC_SINH: usize = 16;
+pub(crate) const FUNC_COSH: usize = 17;
+pub(crate) const FUNC_TANH: usize = 18;
+pub(crate) const FUNC_ASINH: usize = 19;
+pub(crate) const FUNC_ACOSH: usize = 20;
+pub(crate) const FUNC_ATANH: usize = 21;
+pub(crate) const FUNC_ARG: usize = 22;
+pub(crate) const FUNC_ABS: usize = 23;
+pub(crate) const FUNC_RE: usize = 24;
+pub(crate) const FUNC_IM: usize = 25;
+pub(crate) const FUNC_CONJ: usize = 26;
+pub(crate) const FUNC_CEIL: usize = 27;
+pub(crate) const FUNC_FLOOR: usize = 28;
+pub(crate) const FUNC_ROUND: usize = 29;
+pub(crate) const FUNC_RECIP: usize = 30;
+pub(crate) const FUNC_LOG2: usize = 31;
+pub(crate) const FUNC_LOG3: usize = 32;
+pub(crate) const FUNC_LN2: usize = 33;
+pub(crate) const FUNC_MAX: usize = 38;
+pub(crate) const FUNC_MIN: usize = 39;
+pub(crate) const FUNC_EQUAL: usize = 42;
+pub(crate) const FUNC_NOT_EQUAL: usize = 43;
+pub(crate) const FUNC_GREATER: usize = 44;
+pub(crate) const FUNC_LESS: usize = 45;
+pub(crate) const FUNC_GREATER_OR_EQUAL: usize = 46;
+pub(crate) const FUNC_LESS_OR_EQUAL: usize = 47;
+pub(crate) const FUNC_AND: usize = 48;
+pub(crate) const FUNC_OR: usize = 49;
+pub(crate) const FUNC_NOT: usize = 50;
+
+const FAKE_FUNC_THRESHOLD: usize = 53;
+pub(crate) const FAKE_FUNC_CSC: usize = FAKE_FUNC_THRESHOLD;
+pub(crate) const FAKE_FUNC_SEC: usize = FAKE_FUNC_THRESHOLD + 1;
+pub(crate) const FAKE_FUNC_COT: usize = FAKE_FUNC_THRESHOLD + 2;
+pub(crate) const FAKE_FUNC_ACSC: usize = FAKE_FUNC_THRESHOLD + 3;
+pub(crate) const FAKE_FUNC_ASEC: usize = FAKE_FUNC_THRESHOLD + 4;
+pub(crate) const FAKE_FUNC_ACOT: usize = FAKE_FUNC_THRESHOLD + 5;
+pub(crate) const FAKE_FUNC_CSCH: usize = FAKE_FUNC_THRESHOLD + 6;
+pub(crate) const FAKE_FUNC_SECH: usize = FAKE_FUNC_THRESHOLD + 7;
+pub(crate) const FAKE_FUNC_COTH: usize = FAKE_FUNC_THRESHOLD + 8;
+pub(crate) const FAKE_FUNC_ACSCH: usize = FAKE_FUNC_THRESHOLD + 9;
+pub(crate) const FAKE_FUNC_ASECH: usize = FAKE_FUNC_THRESHOLD + 10;
+pub(crate) const FAKE_FUNC_ACOTH: usize = FAKE_FUNC_THRESHOLD + 11;
 
 pub(crate) const PREC_LOG: usize = 0;
 pub(crate) const PREC_CMP: usize = 1;
@@ -121,36 +132,44 @@ pub(crate) const PREC_POW: usize = 5;
 
 const MAX_ITERATIONS: u64 = 9007199254740992; // 2**53 = 2**(f64 mantissa bits + 1); integers larger than this cannot necessarily be exactly represented as an f64.
 
-const ERROR_NO_EQUATION: &str = "no equation";
-const ERROR_UNKNOWN_TOKEN: &str = "unknown token \"{}\"";
-const ERROR_INVALID_NUMBER: &str = "invalid number \"{}\"";
-const ERROR_MISMATCHED_PARENTHESES: &str = "mismatched parentheses";
-const ERROR_EMPTY_ARGUMENT: &str = "empty argument";
-const ERROR_PARENTHESES_ARGUMENT: &str = "parentheses must have 1 argument";
-const ERROR_FUNC_NO_LEFT_PARENTHESIS: &str = "a left parenthesis must follow \"{}\"";
-const ERROR_NONE: &str = "";
-const ERROR_NO_PREFIX_VALUE: &str = "a value must succeed a prefix operator";
-const ERROR_NO_INFIX_VALUE: &str = "a value must preceed and succeed an infix operator";
-const ERROR_NO_POSTFIX_VALUE: &str = "a value must preceed a postfix operator";
-const ERROR_MISMATCHED_CURLIES: &str = "mismatched curlies";
-const ERROR_CURLIES_ARGUMENT: &str = "curlies must have 2 or 3 arguments";
-const ERROR_IF_NO_CURLY: &str = "an if statement must be within curlies";
-const ERROR_ELSE_NO_IF: &str = "an else statement must correspond to an if statement";
-const ERROR_DEF_AT_NO_NAME: &str = "a unique and original definition name must follow an \"@\"";
-const ERROR_DEF_OUT_OF_SCOPE: &str = "definition \"{}\" is out of scope";
-const ERROR_DUPLICATE_DEF: &str = "duplicate definition \"{}\"";
-const ERROR_DEF_PARENTHESES: &str = "definitions must be directly inside parentheses or the equation";
-const ERROR_DEF_NO_ASSIGN: &str = "an assignment operator ['='] must follow the definition {}";
-const ERROR_ADJACENT_VALUES: &str = "values cannot be adjacent";
-const ERROR_LONE_ASSIGN: &str = "lone assignment not to a definition";
-const ERROR_END_CAN_ONLY_FOLLOW_ASSIGN_TO_DEF: &str = "\";\" can only be placed after assignment to a definition";
-const ERROR_EMPTY_ASSIGNMENT: &str = "empty assignment";
+//const ERROR_NO_EQUATION: &str = "no equation";
+//const ERROR_UNKNOWN_TOKEN: &str = "unknown token \"{}\"";
+//const ERROR_INVALID_NUMBER: &str = "invalid number \"{}\"";
+//const ERROR_MISMATCHED_PARENTHESES: &str = "mismatched parentheses";
+//const ERROR_EMPTY_ARGUMENT: &str = "empty argument";
+//const ERROR_PARENTHESES_ARGUMENT: &str = "parentheses must have 1 argument";
+//const ERROR_FUNC_NO_LEFT_PARENTHESIS: &str = "a left parenthesis must follow \"{}\"";
+//const ERROR_NONE: &str = "";
+//const ERROR_NO_PREFIX_VALUE: &str = "a value must succeed a prefix operator";
+//const ERROR_NO_INFIX_VALUE: &str = "a value must preceed and succeed an infix operator";
+//const ERROR_NO_POSTFIX_VALUE: &str = "a value must preceed a postfix operator";
+//const ERROR_MISMATCHED_CURLIES: &str = "mismatched curlies";
+//const ERROR_CURLIES_ARGUMENT: &str = "curlies must have 2 or 3 arguments";
+//const ERROR_IF_NO_CURLY: &str = "an if statement must be within curlies";
+//const ERROR_ELSE_NO_IF: &str = "an else statement must correspond to an if statement";
+//const ERROR_DEF_AT_NO_NAME: &str = "a unique and original definition name must follow an \"@\"";
+//const ERROR_DEF_OUT_OF_SCOPE: &str = "definition \"{}\" is out of scope";
+//const ERROR_DUPLICATE_DEF: &str = "duplicate definition \"{}\"";
+//const ERROR_DEF_PARENTHESES: &str = "definitions must be directly inside parentheses or the equation";
+//const ERROR_DEF_NO_ASSIGN: &str = "an assignment operator ['='] must follow the definition {}";
+//const ERROR_ADJACENT_VALUES: &str = "values cannot be adjacent";
+//const ERROR_LONE_ASSIGN: &str = "lone assignment not to a definition";
+//const ERROR_END_CAN_ONLY_FOLLOW_ASSIGN_TO_DEF: &str = "\";\" can only be placed after assignment to a definition";
+//const ERROR_EMPTY_ASSIGNMENT: &str = "empty assignment";
+//const ERROR_NO_ITER_VAR: &str = "a unique name for the iter variable must follow a \"[\"";
+//const ERROR_NO_ITER_COMMA: &str = "a comma must follow the iter variable";
+//const ERROR_NO_ITER_COUNT_VAR: &str = "a unique name for the iter count variable must be the next argument after the iter variable";
+//const ERROR_NO_ITER_COMMA_2: &str = "a comma must follow the iter count variable";
+//const ERROR_BRACKETS_ARGUMENT: &str = "brackets must have 5 arguments";
+//const ERROR_MISMATCHED_BRACKETS: &str = "mismatched brackets";
 
 const SYMBOL_TYPE_NONE: u8 = 0;
 const SYMBOL_TYPE_NUMBER: u8 = 1;
 const SYMBOL_TYPE_LETTER: u8 = 2;
 const SYMBOL_TYPE_SYMBOL: u8 = 3;
 const SYMBOL_MAX_LENGTH: usize = 2;
+
+pub(crate) const EMPTY_STR: &str = "";
 
 enum Symbol<'sym> {
     Number(&'sym str),
@@ -195,7 +214,7 @@ impl Equation {
 			    Equation::push_const(Complex{re: n, im: 0.0}, &mut tokens, &mut const_tokens, &mut const_counts, &mut const_indices);
 			}
 			_ => {
-			    self.message = format!("invalid number \"{}\"", s);
+			    self.message = format!("invalid number '{}'", s);
 			    self.valid = false;
 			    return false;
 			}
@@ -300,7 +319,7 @@ impl Equation {
 			"min" => {
 			    tokens.push_back(Token::new_min(s));
 			}
-			"i" => {
+			"i" | "j" => {
 			    Equation::push_const(Complex{re: 0.0, im: 1.0}, &mut tokens, &mut const_tokens, &mut const_counts, &mut const_indices);
 			}
 			"pi" => {
@@ -318,8 +337,44 @@ impl Equation {
 			"tau" => {
 			    Equation::push_const(Complex{re: TAU, im: 0.0}, &mut tokens, &mut const_tokens, &mut const_counts, &mut const_indices);
 			}
+			"csc" => {
+			    tokens.push_back(Token::new_csc(s));
+			}
+			"sec" => {
+			    tokens.push_back(Token::new_sec(s));
+			}
+			"cot" => {
+			    tokens.push_back(Token::new_cot(s));
+			}
+			"acsc" => {
+			    tokens.push_back(Token::new_acsc(s));
+			}
+			"asec" => {
+			    tokens.push_back(Token::new_asec(s));
+			}
+			"acot" => {
+			    tokens.push_back(Token::new_acot(s));
+			}
+			"csch" => {
+			    tokens.push_back(Token::new_csch(s));
+			}
+			"sech" => {
+			    tokens.push_back(Token::new_sech(s));
+			}
+			"coth" => {
+			    tokens.push_back(Token::new_coth(s));
+			}
+			"acsch" => {
+			    tokens.push_back(Token::new_acsch(s));
+			}
+			"asech" => {
+			    tokens.push_back(Token::new_asech(s));
+			}
+			"acoth" => {
+			    tokens.push_back(Token::new_acoth(s));
+			}
 			_ => {
-			    tokens.push_back(Token::new_unknown_def(s));
+			    tokens.push_back(Token::new_name(s));
 			    if flag_prev_token_def_at {
 				defs.insert(s);
 			    }
@@ -396,7 +451,7 @@ impl Equation {
 			    tokens.push_back(Token::new_prefix_op_not());
 			}
 			"@" => {
-			    tokens.push_back(Token::new_at());
+			    tokens.push_back(Token::new_def());
 			    flag_prev_token_def_at = true;
 			}
 			"=" => {
@@ -405,7 +460,7 @@ impl Equation {
 			";" => {
 			    tokens.push_back(Token::new_end());
 			}
-			"->" => {
+			"=>" => {
 			    tokens.push_back(Token::new_if());
 			}
 			":" => {
@@ -422,6 +477,12 @@ impl Equation {
 			}
 			"]" => {
 			    tokens.push_back(Token::new_right_bracket());
+			}
+			"$" => {
+			    tokens.push_back(Token::new_redef());
+			}
+			"->" => {
+			    tokens.push_back(Token::new_range());
 			}
 			_ => {
 			    self.message = format!("unknown token \"{}\"", s);
@@ -441,11 +502,14 @@ impl Equation {
 	    return false;
 	}
 
+	//dbg!(&tokens);
+
 	let mut instr_tokens: VecDeque<Token> = VecDeque::new();
 	let mut op_stack: Vec<Token> = Vec::new();
 	let mut op_stack_infix_op_prec: Vec<usize> = Vec::new();
+	let mut alt_stack: Vec<Token> = Vec::new();
 	let mut flag_prev_token_value: bool = false; // since no token precedes the first token, the previous token (which is nothing) could not have been a value).
-	let mut def_indices: HashMap<&str, usize> = HashMap::new(); // &str is definition name, usize is what # definition this is (when definitions go out of scope the # that the next def will get is decreased.).
+	let mut def_indices: HashMap<&str, (usize, bool)> = HashMap::new(); // &str is definition name, usize is what # definition this is (when definitions go out of scope the # that the next def will get is decreased.), and bool is whether this variable can be written.
 	let mut def_list: Vec<&str> = Vec::new(); // a list of what definitions are valid right now. left parenthesis keep track of how many defs they have in them, so when we hit the right parenthesis, the last x # of defs in this list can be removed from the list and def_indices (they go out of scope).
 
 	let mut tokens_iter = tokens.into_iter().peekable();
@@ -457,17 +521,17 @@ impl Equation {
 		    // there must be a value before and after that this infix op can apply to
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value()
+			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value_next()
 		    } {
 			self.valid = false;
-			self.message = ERROR_NO_INFIX_VALUE.to_string();
+			self.message = format!("a value must preceed and succeed an infix operator");
 			return false;
 		    }
 		    // pop ops until we find a "{", and if not this is an error.
-		    Equation::pop_ops_and_control(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
+		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
 		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_curly() {
 			self.valid = false;
-			self.message = ERROR_IF_NO_CURLY.to_string();
+			self.message = format!("an if statement must be within curlies");
 			return false;
 		    }
 		    // update the number of arguments for this curly.
@@ -479,24 +543,24 @@ impl Equation {
 		    // record the index of the jump if instruction in this token, and then add it to the op_stack.
 		    *index_of_token_jump_if_not = instr_tokens.len();
 		    instr_tokens.push_back(Token::new_jump_if_not());
-		    op_stack.push(token);
+		    alt_stack.push(token);
 		    flag_prev_token_value = false; // this token is not a value
 		},
 		Token::Else{index_of_token_jump} => {
 		    // there must be a value before and after that this infix op can apply to
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value()
+			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value_next()
 		    } {
 			self.valid = false;
-			self.message = ERROR_NO_INFIX_VALUE.to_string();
+			self.message = format!("a value must preceed and succeed an infix operator");
 			return false;
 		    }
 		    // there must be a corresponding "if" on the operator stack, so pop until we find it.
 		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
-		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_if() {
+		    if alt_stack.len() == 0 || !alt_stack.last().unwrap().is_if() {
 			self.valid = false;
-			self.message = ERROR_ELSE_NO_IF.to_string();
+			self.message = format!("an else statement must correspond to an if statement");
 			return false;
 		    }
 		    // update the number of arguments for this curly.
@@ -508,7 +572,7 @@ impl Equation {
 		    //
 		    *index_of_token_jump = instr_tokens.len();
 		    instr_tokens.push_back(Token::new_jump());
-		    let if_token: &mut Token = op_stack.last_mut().unwrap();
+		    let if_token: &mut Token = alt_stack.last_mut().unwrap();
 		    if let Token::If{index_of_token_jump_if_not, paired_with_else} = if_token {
 			// always the case
 			let instr_tokens_len: usize = instr_tokens.len();
@@ -520,7 +584,7 @@ impl Equation {
 			*paired_with_else = true;
 		    }
 		    instr_tokens.push_back(Token::new_placeholder());
-		    op_stack.push(token);
+		    alt_stack.push(token);
 		    flag_prev_token_value = false; // this token is not a value
 		},
 		// func
@@ -528,10 +592,10 @@ impl Equation {
 		    // there must be a value after that this prefix op can apply to.
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_none() || !next_token.unwrap().is_result_value()
+			next_token.is_none() || !next_token.unwrap().is_result_value_next()
 		    } {
 			self.valid = false;
-			self.message = ERROR_NO_PREFIX_VALUE.to_string();
+			self.message = format!("a value must succeed a prefix operator");
 			return false;
 		    }
 		    op_stack.push(token);
@@ -541,10 +605,10 @@ impl Equation {
 		    // there must be a value before and after that this infix op can apply to.
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value()
+			!flag_prev_token_value || next_token.is_none() || !next_token.unwrap().is_result_value_next()
 		    } {
 			self.valid = false;
-			self.message = ERROR_NO_INFIX_VALUE.to_string();
+			self.message = format!("a value must preceed and succeed an infix operator");
 			return false;
 		    }
 		    let prec: usize = *prec;
@@ -578,7 +642,7 @@ impl Equation {
 		    // there must be a value before that this postfix op can apply to.
 		    if !flag_prev_token_value {
 			self.valid = false;
-			self.message = ERROR_NO_POSTFIX_VALUE.to_string();
+			self.message = format!("a value must preceed a postfix operator");
 			return false;
 		    }
 		    let prec: usize = *prec;
@@ -588,19 +652,19 @@ impl Equation {
 			    && (prec <= op.op_prec().unwrap()
 				|| (op_stack_infix_op_prec.len() > 0
 				    && prec <= (&op_stack[*op_stack_infix_op_prec.last().unwrap()]).op_prec().unwrap())) {
-				let op: Token = op_stack.pop().unwrap();
-				if op.is_infix_op() {
-				    op_stack_infix_op_prec.pop();
-				}
-				instr_tokens.push_back(op);
-			    } else {
-				break;
+			    let op: Token = op_stack.pop().unwrap();
+			    if op.is_infix_op() {
+				op_stack_infix_op_prec.pop();
 			    }
+			    instr_tokens.push_back(op);
+			} else {
+			    break;
+			}
 		    }
 		    instr_tokens.push_back(token);
 		    flag_prev_token_value = true;
 		}
-		Token::FixedFunc{id, args, name} => {
+		Token::FixedFunc{id: _, args: _, name, ..} => {
 		    let next_token = tokens_iter.peek();
 		    if !(next_token.is_some() && next_token.unwrap().is_left_paren()) {
 			// there is either not another token or it is not a left parenthesis, which is an error.
@@ -633,7 +697,7 @@ impl Equation {
 			// empty argument: "(,"
 			// the equation contained a left parenthesis followed by a comma, which is an error.
 			self.valid = false;
-			self.message = ERROR_EMPTY_ARGUMENT.to_string();
+			self.message = format!("empty argument");
 			return false;
 		    }
 		    if next_token.is_some() && next_token.unwrap().is_right_paren() {
@@ -644,6 +708,7 @@ impl Equation {
 			*count = 1;
 		    }
 		    op_stack.push(token);
+		    alt_stack.push(Token::new_block());
 		    flag_prev_token_value = false;
 		}
 		Token::RightParen => {
@@ -652,15 +717,20 @@ impl Equation {
 		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_paren() {
 			// mismatched parenthesis: every right parenthesis must have a matching left parenthesis, yet there were none on the operator stack
 			self.valid = false;
-			self.message = ERROR_MISMATCHED_PARENTHESES.to_string();
+			self.message = format!("mismatched parentheses");
+			return false;
+		    } else if !alt_stack.last().unwrap().is_block() {
+			// missing ; after definition.
+			self.valid = false;
+			self.message = format!("missing end [';'] after definition");
 			return false;
 		    } else if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_some() && next_token.unwrap().is_result_value()
+			next_token.is_some() && next_token.unwrap().is_result_value_next()
 		    } {
 			// a value preceeds this ")" (e.g. ")2" or ")(") which is not valid.
 			self.valid = false;
-			self.message = ERROR_ADJACENT_VALUES.to_string();
+			self.message = format!("adjacent values with no operator or seperator in between");
 			return false;
 		    }
 		    let left_paren: Token = op_stack.pop().unwrap();
@@ -669,13 +739,21 @@ impl Equation {
 			if op_stack.len() > 0 && op_stack.last().unwrap().is_func() {
 			    let func: Token = op_stack.pop().unwrap();
 			    match &func {
-				Token::FixedFunc{id, args, name} => {
-				    if *args == *count {
-					instr_tokens.push_back(func);
-				    } else {
+				Token::FixedFunc{id: _, args, name, instructionize} => {
+				    if *args != *count {
 					self.valid = false;
 					self.message = format!("{} is not a valid number of arguments for {}", *count, name);
 					return false;
+				    }
+				    if instructionize.is_none() {
+					instr_tokens.push_back(func);
+				    } else {
+					let error: Option<String> = instructionize.as_ref().unwrap().instructionize(&mut instr_tokens, *args, &mut const_tokens, &mut const_counts, &mut const_indices);
+					if error.is_some() {
+					    self.valid = false;
+					    self.message = error.unwrap();
+					    return false;
+					}
 				    }
 				},
 				Token::UnfixedFunc{args, name} => {
@@ -700,61 +778,174 @@ impl Equation {
 			    if *count != 1 {
 				// parenthesis either were empty or had more than 1 argument.
 				self.valid = false;
-				self.message = ERROR_PARENTHESES_ARGUMENT.to_string();
+				self.message = format!("parentheses must have 1 argument");
 				return false;
 			    }
 			}
 			// release defs for this left parenthesis.
 			if *defs != 0 {
-			    for i in 0..*defs {
+			    for _i in 0..*defs {
 				def_indices.remove(&def_list.pop().unwrap());
 			    }
 			    instr_tokens.push_back(Token::new_free_def(*defs));
+			    //alt_stack.pop(); // pop the block that seperated definitions in this set of parentheses from parent parentheses.
 			}
+			alt_stack.pop(); // pop the block that seperated definitions in this set of parentheses from parent parentheses.
 		    }
 		    flag_prev_token_value = true;
 		}
 		Token::Comma => {
 		    // pop operators off the operator stack until we find a left parenthesis; if we don't that's an error.
-		    Equation::pop_ops_and_control(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
-		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_paren() {
+		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
+		    if op_stack.len() == 0 {
 			// mismatched parenthesis: comma must always be inside parenthesis, yet there were no parenthesis on the operator stack.
 			self.valid = false;
-			self.message = ERROR_MISMATCHED_PARENTHESES.to_string();
+			self.message = format!("mismatched parentheses");
 			return false;
 		    }
-		    let next_token = tokens_iter.peek();
-		    if next_token.is_some() && (next_token.unwrap().is_comma() || next_token.unwrap().is_right_paren()) {
-			// empty argument, either ",," or ",)", which is an error.
-			self.valid = false;
-			self.message = ERROR_EMPTY_ARGUMENT.to_string();
-			return false;
-		    }
-		    // the comma is converted into a store instruction
-		    instr_tokens.push_back(Token::new_store());
-		    let func: &mut Token = op_stack.last_mut().unwrap();
-		    if let Token::LeftParen{count, ..} = func {
-			// always the case, increment the argument count associated with this parenthesis.
-			*count += 1;
-		    }
+		    let top_op: &mut Token = op_stack.last_mut().unwrap();
+		    match top_op {
+			Token::LeftParen{count, ..} => {
+			    if !alt_stack.last().unwrap().is_block() {
+				self.valid = false;
+				self.message = format!("missing end [';'] after definition");
+				return false;
+			    } else if {
+				let next_token = tokens_iter.peek();
+				next_token.is_some() && (next_token.unwrap().is_comma() || next_token.unwrap().is_right_paren())
+			    } {
+				// empty argument, either ",," or ",)", which is an error.
+				self.valid = false;
+				self.message = format!("empty argument");
+				return false;
+			    }
+			    // the comma is converted into a store instruction
+			    instr_tokens.push_back(Token::new_store());
+			    // increment the argument count associated with this parenthesis.
+			    *count += 1;
+			}
+			Token::LeftBracket{..} | Token::LeftCurly{..} => {
+			    self.valid = false;
+			    self.message = format!("commas [','] can only appear inside parentheses");
+			    return false;
+			}
+			_ => {
+			    // mismatched parenthesis: comma must always be inside parenthesis, yet there were no parenthesis on the operator stack.
+			    self.valid = false;
+			    self.message = format!("mismatched parentheses");
+			    return false;
+			}
+		    }		    
 		    flag_prev_token_value = false;
 		}
 		Token::LeftBracket{count} => {
-		    
-		}
-		Token::RightBracket => {
-		    
-		}
-		Token::LeftCurly{count} => {
-		    let next_token = tokens_iter.peek();
-		    if next_token.is_some() && next_token.unwrap().is_comma() {
-			// empty argument: "{,"
-			// the equation contained a left parenthesis followed by a comma, which is an error.
+		    // next token must be a def (@) symbol.
+		    if {
+			let next_token = tokens_iter.peek();
+			next_token.is_none() || !next_token.unwrap().is_def()
+		    } {
 			self.valid = false;
-			self.message = ERROR_EMPTY_ARGUMENT.to_string();
+			self.message = format!("a definition ['@'] for the iter count variable must follow a left bracket ['[']");
 			return false;
 		    }
-		    if next_token.is_some() && next_token.unwrap().is_right_curly() {
+		    tokens_iter.next();
+		    // next token must be a name.
+		    if {
+			let next_token = tokens_iter.peek();
+			next_token.is_none() || !next_token.unwrap().is_name()
+		    } {
+			// error, a name must follow a definition.
+			self.valid = false;
+			self.message = format!("a name must follow a definition ['@']");
+			return false;
+		    }
+		    let iter_count_var: Token = tokens_iter.next().unwrap();
+		    if let Token::Name{name} = iter_count_var {
+			// always the case.
+			if def_indices.contains_key(name) {
+			    // error, duplicate definition.
+			    self.valid = false;
+			    self.message = format!("definition to duplicate name '{}'", name);
+			    return false;
+			}
+			alt_stack.push(Token::new_iter_var(name));
+			// next token must be a range symbol.
+			if {
+			    let next_token = tokens_iter.peek();
+			    next_token.is_none() || !next_token.unwrap().is_range()
+			} {
+			    // error, a range must follow.
+			    self.valid = false;
+			    self.message = format!("a range ['->'] must follow definition to iter count variable name '{}'", name);
+			    return false;
+			}
+			tokens_iter.next();
+			// next token must be a value.
+			if {
+			    let next_token = tokens_iter.peek();
+			    next_token.is_none() || !next_token.unwrap().is_result_value_next()
+			} {
+			    self.valid = false;
+			    self.message = format!("empty range for definition to iter count variable name '{}'", name);
+			    return false;
+			}
+		    }
+		    // add this bracket to the op stack.
+		    *count = 1;
+		    op_stack.push(token);
+		    flag_prev_token_value = false;
+		}
+		Token::RightBracket => {
+		    // pop operators off the operator stack until we find a left bracket to go with the right curly.
+		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
+		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_bracket() {
+			// mismatched brackets: every right bracket must have a matching left bracket, yet there were none on the operator stack
+			self.valid = false;
+			self.message = format!("mismatched brackets ['[]']");
+			return false;
+		    } else if {
+			let next_token: Option<&Token> = tokens_iter.peek();
+			next_token.is_some() && next_token.unwrap().is_result_value_next()
+		    } {
+			// a value preceeds this ")" (e.g. ")2" or ")(") which is not valid.
+			self.valid = false;
+			self.message = format!("adjacent values with no operator or seperator in between");
+			return false;
+		    }
+		    // verify arguments
+		    let left_bracket: Token = op_stack.pop().unwrap();
+		    if let Token::LeftBracket{count} = &left_bracket {
+			// always the case.
+			if *count != 3 {
+			    // brackets didn't have 3 arguments
+			    self.valid = false;
+			    self.message = format!("brackets ['[]'] must have 3 arguments");
+			    return false;
+			}
+		    }
+		    // deal with iter vars.
+		    let iter_recursive_name: &str = def_list.pop().unwrap();
+		    let iter_count_name: &str = def_list.pop().unwrap();
+		    def_indices.remove(iter_recursive_name);
+		    def_indices.remove(iter_count_name);
+		    // deal with jump indices.
+		    let token_index_of_iter_placeholder: Token = alt_stack.pop().unwrap();
+		    if let Token::Index{index: index_of_iter_placeholder} = token_index_of_iter_placeholder {
+			// always the case.
+			let instr_tokens_len = instr_tokens.len();
+			let token_iter_placeholder: &mut Token = &mut instr_tokens[index_of_iter_placeholder];
+			if let Token::IterPlaceholder{index_of_token_iter_test} = token_iter_placeholder {
+			    // always the case.
+			    *index_of_token_iter_test = instr_tokens_len;
+			}
+		    }
+		    instr_tokens.push_back(Token::new_iter_test());
+		}
+		Token::LeftCurly{count} => {
+		    if {
+			let next_token = tokens_iter.peek();
+			next_token.is_some() && next_token.unwrap().is_right_curly()
+		    } {
 			// a right curly follows this left curly, so these curlies have 0 arguments inside.
 			*count = 0;
 		    } else {
@@ -766,19 +957,19 @@ impl Equation {
 		}
 		Token::RightCurly => {
 		    // pop operators off the operator stack until we find a left curly to go with the right curly.
-		    Equation::pop_ops_and_control(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
+		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
 		    if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_curly() {
 			// mismatched curlies: every right curly must have a matching left curly, yet there were none on the operator stack
 			self.valid = false;
-			self.message = ERROR_MISMATCHED_CURLIES.to_string();
+			self.message = format!("mismatched curlies");
 			return false;
 		    } else if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_some() && next_token.unwrap().is_result_value()
+			next_token.is_some() && next_token.unwrap().is_result_value_next()
 		    } {
 			// a value preceeds this ")" (e.g. ")2" or ")(") which is not valid.
 			self.valid = false;
-			self.message = ERROR_ADJACENT_VALUES.to_string();
+			self.message = format!("adjacent values with no operator or seperator in between");
 			return false;
 		    }
 		    let left_curly: Token = op_stack.pop().unwrap();
@@ -787,9 +978,35 @@ impl Equation {
 			if *count != 2 && *count != 3 {
 			    // curlies didn't have either 2 or 3 arguments
 			    self.valid = false;
-			    self.message = ERROR_CURLIES_ARGUMENT.to_string();
+			    self.message = format!("curlies must have 2 or 3 arguments");
 			    return false;
 			}
+		    }
+		    // pop if or if and else off the alt stack, since we have verified that these curlies have 2 or 3 arguments
+		    let if_or_else: Token = alt_stack.pop().unwrap();
+		    match &if_or_else {
+			Token::If{index_of_token_jump_if_not, paired_with_else} => {
+			    if !*paired_with_else {
+				let instr_tokens_len: usize = instr_tokens.len();
+				let jump_if_not: &mut Token = &mut instr_tokens[*index_of_token_jump_if_not];
+				if let Token::JumpIfNot{index_of_token_placeholder} = jump_if_not {
+				    // always the case.
+				    *index_of_token_placeholder = instr_tokens_len;
+				}
+				instr_tokens.push_back(Token::new_placeholder());
+			    }
+			}
+			Token::Else{index_of_token_jump} => {
+			    let instr_tokens_len: usize = instr_tokens.len();
+			    let jump: &mut Token = &mut instr_tokens[*index_of_token_jump];
+			    if let Token::Jump{index_of_token_placeholder} = jump {
+				// always the case.
+				*index_of_token_placeholder = instr_tokens_len;
+			    }
+			    instr_tokens.push_back(Token::new_placeholder());
+			    alt_stack.pop(); // pop off the associated if from the alt_stack.
+			}
+			_ => {}
 		    }
 		    flag_prev_token_value = true;
 		}
@@ -797,11 +1014,11 @@ impl Equation {
 		Token::Const{..} => {
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_some() && next_token.unwrap().is_result_value()
+			next_token.is_some() && next_token.unwrap().is_result_value_next()
 		    } {
 			// a value preceeds this ")" (e.g. ")2" or ")(") which is not valid.
 			self.valid = false;
-			self.message = ERROR_ADJACENT_VALUES.to_string();
+			self.message = format!("adjacent values with no operator or seperator in between");
 			return false;
 		    }
 		    instr_tokens.push_back(token);
@@ -811,34 +1028,39 @@ impl Equation {
 		Token::Var{index} => {
 		    // TODO: implement
 		}
-		Token::At => {
+		Token::Def => {
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_none() || !next_token.unwrap().is_unknown_def()
+			next_token.is_none() || !next_token.unwrap().is_name()
 		    } {
 			self.valid = false;
-			self.message = ERROR_DEF_AT_NO_NAME.to_string();
+			self.message = format!("a unique and original definition name must follow an \"@\"");
 			return false;
 		    }
-		    let mut next_token: Token = tokens_iter.next().unwrap();
-		    if let Token::UnknownDef{name} = next_token {
-			// always the case.
+		    let name_token: Token = tokens_iter.next().unwrap();
+		    if let Token::Name{name} = name_token {
 			if def_indices.contains_key(name) {
 			    self.valid = false;
-			    self.message = format!("duplicate definition \"{}\"", name);
+			    self.message = format!("definition to duplicate name '{}'", name);
 			    return false;
-			} else if op_stack.len() == 0 || !op_stack.last().unwrap().is_left_paren() {// || (op_stack.len() > 1 && op_stack[op_stack.len() - 2].is_func()) {
+			} else if op_stack.len() == 0 || !{
+			    let top_op: &Token = op_stack.last().unwrap();
+			    if let Token::LeftParen{count, ..} = top_op {
+				*count == 1
+			    } else {
+				false
+			    }
+			} {
 			    // TODO: check that previous token is a "(" or a ";".
 			    self.valid = false;
-			    self.message = ERROR_DEF_PARENTHESES.to_string();
+			    self.message = format!("definitions must be directly inside parentheses or the equation");
 			    return false;
 			}
 			let left_paren: &mut Token = op_stack.last_mut().unwrap();
-			if let Token::LeftParen{count, defs} = left_paren {
+			if let Token::LeftParen{count: _, defs} = left_paren {
 			    // always happens.
 			    *defs += 1;
 			}
-			op_stack.push(Token::new_no_arg_def(name));
 			if {
 			    let next_token: Option<&Token> = tokens_iter.peek();
 			    next_token.is_none() || !next_token.unwrap().is_assign()
@@ -847,80 +1069,325 @@ impl Equation {
 			    self.message = format!("an assignment operator ['='] must follow the definition {}", name);
 			    return false;
 			}
+			tokens_iter.next();
+			alt_stack.push(name_token);
+			alt_stack.push(token);
 		    }
-		    next_token = tokens_iter.next().unwrap();
 		    if {
 			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_none() || !next_token.unwrap().is_result_value()
+			next_token.is_none() || !next_token.unwrap().is_result_value_next()
 		    } {
 			self.valid = false;
-			self.message = ERROR_EMPTY_ASSIGNMENT.to_string();
+			self.message = format!("empty assignment");
 			return false;
 		    }
 		    flag_prev_token_value = false;
 		},
-		Token::UnknownDef{name} => {
+		Token::Redef => {
+		    if {
+			let next_token: Option<&Token> = tokens_iter.peek();
+			next_token.is_none() || !next_token.unwrap().is_name()
+		    } {
+			self.valid = false;
+			self.message = format!("a unique and original definition name must follow an \"@\"");
+			return false;
+		    }
+		    let name_token: Token = tokens_iter.next().unwrap();
+		    if let Token::Name{name} = name_token {
+			if !def_indices.contains_key(name) {
+			    self.valid = false;
+			    self.message = if defs.contains(name) {
+				format!("redefinition to out-of-scope name '{}'", name)
+			    } else {
+				format!("redefinition to unknown name '{0}'", name)
+			    };
+			    return false;
+			} else if op_stack.len() == 0 || !{
+			    let top_op: &Token = op_stack.last().unwrap();
+			    if let Token::LeftParen{count, ..} = top_op {
+				*count == 1
+			    } else {
+				false
+			    }
+			} {
+			    // TODO: check that previous token is a "(" or a ";".
+			    self.valid = false;
+			    self.message = format!("redefinitions must be directly inside parentheses or the equation");
+			    return false;
+			} else if !def_indices.get(name).unwrap().1 {
+			    self.valid = false;
+			    self.message = format!("redefinition to unwritable name '{}'", name);
+			    return false;
+			}
+			if {
+			    let next_token: Option<&Token> = tokens_iter.peek();
+			    next_token.is_none() || !next_token.unwrap().is_assign()
+			} {
+			    self.valid = false;
+			    self.message = format!("an assignment operator ['='] must follow the redefinition {}", name);
+			    return false;
+			}
+			tokens_iter.next();
+			alt_stack.push(name_token);
+			alt_stack.push(token);
+		    }
+		    if {
+			let next_token: Option<&Token> = tokens_iter.peek();
+			next_token.is_none() || !next_token.unwrap().is_result_value_next()
+		    } {
+			self.valid = false;
+			self.message = format!("empty assignment");
+			return false;
+		    }
+		    flag_prev_token_value = false;
+		}
+		Token::Name{name} => {
 		    if def_indices.contains_key(name) {
-			instr_tokens.push_back(Token::new_no_arg_val(*def_indices.get(name).unwrap()));
+			instr_tokens.push_back(Token::new_no_arg_val(def_indices.get(name).unwrap().0));
 		    } else if defs.contains(name) {
 			self.valid = false;
-			self.message = format!("definition \"{}\" is out of scope", name);
+			self.message = format!("definition '{}' is out of scope", name);
 			return false;
 		    } else {
 			self.valid = false;
-			self.message = format!("unknown token \"{}\"", name);
+			self.message = format!("unknown token '{}'", name);
 			return false;
 		    }
 		    flag_prev_token_value = true;
 		},
 		Token::Assign => {
 		    self.valid = false;
-		    self.message = ERROR_LONE_ASSIGN.to_string();
+		    self.message = format!("lone assignment not to a definition");
 		    return false;
-		    //flag_prev_token_def_at = false;
 		},
+		Token::Range => {
+		    self.valid = false;
+		    self.message = format!("lone range ['->']");
+		    return false;
+		}
 		Token::End => {
-		    if {
-			let next_token: Option<&Token> = tokens_iter.peek();
-			next_token.is_some() && {
-			    let next_token: &Token = next_token.unwrap();
-			    next_token.is_comma() || next_token.is_right_paren()
-			}
-		    } {
-			self.valid = false;
-			self.message = ERROR_EMPTY_ARGUMENT.to_string();
-			return false;
-		    }
 		    Equation::pop_ops(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
-		    if {
-			let top_op: Option<&Token> = op_stack.last();
-			top_op.is_none() || !top_op.unwrap().is_no_arg_def()
-		    } {
+		    if op_stack.len() == 0 {
 			self.valid = false;
-			self.message = ERROR_END_CAN_ONLY_FOLLOW_ASSIGN_TO_DEF.to_string();
+			self.message = format!("ends [';'] can only be placed inside parentheses and brackets");
 			return false;
 		    }
-		    let mut no_arg_def: Token = op_stack.pop().unwrap();
-		    if let Token::NoArgDef{index, name} = &mut no_arg_def {
-			let def_index: usize = def_list.len();
-			def_indices.insert(name, def_index);
-			def_list.push(name);
-			*index = def_index;
+		    let top_op: &mut Token = op_stack.last_mut().unwrap();
+		    match top_op {
+			Token::LeftParen{..} => {
+			    if {
+				let next_token = tokens_iter.peek();
+				next_token.is_some() && {
+				    let next_token: &Token = next_token.unwrap();
+				    next_token.is_comma() || next_token.is_right_paren()
+				}
+			    } {
+				self.valid = false;
+				self.message = format!("empty argument");
+				return false;
+			    } else if {
+				let top_alt: Option<&Token> = alt_stack.last();
+				top_alt.is_none() || {
+				    let top_alt: &Token = top_alt.unwrap();
+				    !(top_alt.is_def() || top_alt.is_redef())
+				}
+			    } {
+				self.valid = false;
+				self.message = format!("\";\" can only be placed after assignment to a definition");
+				return false;
+			    }
+			    let def_or_redef: Token = alt_stack.pop().unwrap();
+			    let name_token: Token = alt_stack.pop().unwrap();
+			    if let Token::Name{name} = name_token {
+				//always the case.
+				match def_or_redef {
+				    Token::Def => {
+					let index: usize = def_list.len();
+					def_indices.insert(name, (index, true)); // variable can be written.
+					def_list.push(name);
+					instr_tokens.push_back(Token::new_no_arg_def());
+					instr_tokens.push_back(Token::new_store());
+				    }
+				    Token::Redef => {
+					let index: usize = def_indices.get(name).unwrap().0;
+					instr_tokens.push_back(Token::new_write(index));
+				    }
+				    _ => {} // never
+				}
+			    }
+			}
+			Token::LeftBracket{count} => {
+			    match *count {
+				1 => {
+				    // tie the current store_index to the iter count variable, add the iter token to the instr_tokens.
+				    instr_tokens.push_back(Token::new_no_arg_def());
+				    instr_tokens.push_back(Token::new_iter());
+				    // next token must be a def (@) symbol.
+				    if {
+					let next_token = tokens_iter.peek();
+					next_token.is_none() || !next_token.unwrap().is_def()
+				    } {
+					self.valid = false;
+					self.message = format!("a definition ['@'] for the iter recursive variable must follow the first end [';'] after a left bracket ['[']");
+					return false;
+				    }
+				    tokens_iter.next();
+				    // next token must be a name.
+				    if {
+					let next_token = tokens_iter.peek();
+					next_token.is_none() || !next_token.unwrap().is_name()
+				    } {
+					// error, a name must follow a definition.
+					self.valid = false;
+					self.message = format!("a name must follow a definition ['@']");
+					return false;
+				    }
+				    // TODO: this is iter recursive var, not iter count var.
+				    let iter_recursive_var: Token = tokens_iter.next().unwrap();
+				    if let Token::Name{name} = &iter_recursive_var {
+					// always the case.
+					if def_indices.contains_key(name) || {
+					    let top_alt: &Token = alt_stack.last().unwrap();
+					    if let Token::IterVar{name: iter_count_name} = top_alt {
+						// always the case
+						name == iter_count_name
+					    } else {
+						false
+					    }
+					} {
+					    // error, duplicate definition.
+					    self.valid = false;
+					    self.message = format!("definition to duplicate name '{}'", name);
+					    return false;
+					}
+					// we will need the iter count variable later.
+					alt_stack.push(Token::new_iter_var(name));
+					// next token must be an assign symbol.
+					if {
+					    let next_token = tokens_iter.peek();
+					    next_token.is_none() || !next_token.unwrap().is_assign()
+					} {
+					    // error, an assign must follow.
+					    self.valid = false;
+					    self.message = format!("an assign ['='] must follow definition to iter recursive variable name '{}'", name);
+					    return false;
+					}
+					tokens_iter.next();
+					// next token must be a value.
+					if {
+					    let next_token = tokens_iter.peek();
+					    next_token.is_none() || !next_token.unwrap().is_result_value_next()
+					} {
+					    self.valid = false;
+					    self.message = format!("empty assign for definition to iter recurive variable name '{}'", name);
+					    return false;
+					}
+				    }
+				}
+				2 => {
+				    // for the iter recursive variable, so we can tie in the current store_count.
+				    instr_tokens.push_back(Token::new_no_arg_def());
+				    // add a store to the instructions.
+				    instr_tokens.push_back(Token::new_store());
+				    // set up iter variables.
+				    let iter_recursive_var: Token = alt_stack.pop().unwrap();
+				    let iter_count_var: Token = alt_stack.pop().unwrap();
+				    // will need the index of the next instruction token in instr_tokens so we can jump back there when we iterate.
+				    alt_stack.push(Token::new_index(instr_tokens.len()));
+				    instr_tokens.push_back(Token::new_iter_placeholder());
+				    if let Token::IterVar{name: iter_count_name} = &iter_count_var {
+					// always the case.
+					if let Token::IterVar{name: iter_recursive_name} = &iter_recursive_var {
+					    // always the case.
+					    // prepare iter count var
+					    def_indices.insert(iter_count_name, (def_list.len(), false)); // iter count variable is not writeable.
+					    def_list.push(iter_count_name);
+					    // prepare iter recursive var
+					    def_indices.insert(iter_recursive_name, (def_list.len(), true)); // iter count variable is writeable.
+					    def_list.push(iter_recursive_name);
+					    instr_tokens.push_back(Token::new_write(def_indices.get(iter_recursive_name).unwrap().0));
+					    // next token must be a redef ($) symbol.
+					    if {
+						let next_token = tokens_iter.peek();
+						next_token.is_none() || !next_token.unwrap().is_redef()
+					    } {
+						self.valid = false;
+						self.message = format!("a redefinition ['$'] for the iter recursive variable must follow the second end [';'] after a left bracket ['[']");
+						return false;
+					    }
+					    tokens_iter.next();
+					    // next token must be the iter recursive var name.
+					    if {
+						let next_token = tokens_iter.peek();
+						next_token.is_none() || !next_token.unwrap().is_name()
+					    } {
+						// error, a name must follow a definition.
+						self.valid = false;
+						self.message = format!("a name must follow a redefinition ['$']");
+						return false;
+					    }
+					    let iter_recursive_var: Token = tokens_iter.next().unwrap();
+					    if let Token::Name{name} = &iter_recursive_var {
+						// always the case.
+						if name != iter_recursive_name {
+						    // error, not a redinition to the iter recursive var.
+						    self.valid = false;
+						    self.message = format!("redefinition ['$'] in iter must be to the iter recursive variable name '{}', not '{}'", iter_recursive_name, name);
+						    return false;
+						}
+						// next token must be an assign symbol.
+						if {
+						    let next_token = tokens_iter.peek();
+						    next_token.is_none() || !next_token.unwrap().is_assign()
+						} {
+						    // error, an assign must follow.
+						    self.valid = false;
+						    self.message = format!("an assign ['='] must follow redefinition to iter recursive variable name '{}'", name);
+						    return false;
+						}
+						tokens_iter.next();
+						// next token must be a value.
+						if {
+						    let next_token = tokens_iter.peek();
+						    next_token.is_none() || !next_token.unwrap().is_result_value_next()
+						} {
+						    self.valid = false;
+						    self.message = format!("empty assign for redefinition to iter recurive variable name '{}'", name);
+						    return false;
+						}
+					    }
+					}
+				    }
+				}
+				_ => {
+				    if {
+					let next_token = tokens_iter.peek();
+					next_token.is_some() && !next_token.unwrap().is_result_value_next()
+				    } {
+					self.valid = false;
+					self.message = format!("empty argument after end [';']");
+					return false;
+				    }
+				}
+			    }
+			    *count += 1;
+			}
+			_ => {
+			    self.valid = false;
+			    self.message = format!("ends [';'] can only be placed inside parentheses ['()'] and brackets ['[]']");
+			    return false;
+			}
 		    }
-		    instr_tokens.push_back(no_arg_def);
-		    instr_tokens.push_back(Token::new_store());
 		    flag_prev_token_value = false;
 		},
-		_ => {
-		    //flag_prev_token_def_at = false;
-		},
+		_ => {},
 	    }
 	    i += 1;
 	}
 	Equation::pop_ops_and_control(&mut op_stack, &mut instr_tokens, &mut op_stack_infix_op_prec);
 	if op_stack.len() != 0 {
 	    self.valid = false;
-	    self.message = ERROR_MISMATCHED_PARENTHESES.to_string();
+	    self.message = format!("mismatched parentheses, brackets, or curlies");
 	    return false;
 	}
 
@@ -948,15 +1415,17 @@ impl Equation {
 	while offset < instr_tokens_len {
 	    let instr_token: Token = instr_tokens.pop_front().unwrap();
 	    offset += 1;
-	    instr_token.encode(&mut instrs, &const_instrs, &mut store_count, &mut max_store_count, &mut instr_tokens, offset, max_instrs_len, &mut def_store_indices);
+	    instr_token.encode(&mut instrs, &const_instrs, &mut store_count, &mut max_store_count, &mut instr_tokens, offset, max_instrs_len, &mut def_store_indices);//, &mut iter_stack_indices);
 	}
+
+	//dbg!(&instrs);
 
 	self.instructions = instrs.into();
 	self.constants = consts.into();
 	self.store_length = max_store_count;
 
 	self.valid = true;
-	self.message = ERROR_NONE.to_string();
+	self.message = format!("");
 	return true;
     }
     // if the last expression this equation parsed was valid, evaluate that expression and return Some(result), otherwise None.
@@ -996,10 +1465,6 @@ impl Equation {
 			w = w.neg();
 		    },
 		    INSTR_POW => {
-			store_count -= 1;
-			w = store[store_count].pow(&w);
-		    },
-		    INSTR_POWN => {
 			store_count -= 1;
 			w = store[store_count].pow(&w);
 		    },
@@ -1087,38 +1552,39 @@ impl Equation {
 			store_count -= 1;
 			w = store[store_count].ln2(w.re);
 		    },
-		    INSTR_ITER => {
+		    /*INSTR_ITER => {
 			//store[store_count] = Complex{re: f64::from_bits(0_u64), im: f64::from_bits((w.re as u64).clamp(0, MAX_ITERATIONS))};
 			store[store_count] = Complex{re: f64::from_bits(0_u64), im: f64::from_bits(Equation::clamp::<u64>(w.re as u64, 0, MAX_ITERATIONS))};
 			store_count += 2;
-		    },
-		    INSTR_ITER_STORE => {
-			store[store_count - 1].set(&w);
+		    },*/
+		    INSTR_ITER => {
+			store[store_count] = Complex{re: 0.0, im: 0.0};
+			store[store_count + 1] = Complex{re: Equation::clamp::<u64>(w.re as u64, 0, MAX_ITERATIONS) as f64, im: 0.0};
+			store_count += 2;
 		    },
 		    INSTR_READ => {
 			let index: usize = Equation::decode_value(instrs, &mut i);
 			w.set(&store[index]);
 		    },
-		    INSTR_ITER_COUNT => {
+		    INSTR_WRITE => {
 			let index: usize = Equation::decode_value(instrs, &mut i);
-			w = Complex{re: (store[index].re.to_bits()) as f64, im: 0.0};
-		    },
+			store[index].set(&w);
+		    }
 		    INSTR_ITER_TEST => {
-			let iter_count_and_max: &Complex = &store[store_count - 2];
-			let iter_count: u64 = 1 + iter_count_and_max.re.to_bits();
-			let iter_max: u64 = iter_count_and_max.im.to_bits();
+			let iter_count: f64 = 1.0 + store[store_count - 3].re;
+			let iter_max: f64 = store[store_count - 2].re;
+			let index: usize = Equation::decode_value(instrs, &mut i);
 			if iter_count < iter_max {
 			    // keep iterating.
-			    let index: usize = Equation::decode_value(instrs, &mut i);
 			    i = index;
-			    store[store_count - 2] = Complex{re: f64::from_bits(iter_count), im: f64::from_bits(iter_max)};
+			    store[store_count - 3].re = iter_count;
 			} else {
 			    // stop iterating.
-			    if iter_max == 0 {
+			    if iter_max == 0.0 {
 				// iter was supposed to do 0 iterations, but actually did 1, so set w = w = init.
 				w.set(&store[store_count - 1]);
 			    }
-			    store_count -= 2;
+			    store_count -= 3;
 			}
 		    },
 		    INSTR_MAX => {
@@ -1204,16 +1670,16 @@ impl Equation {
 			});
 		    },
 		    INSTR_NOT => {
-			w.set(if w == (Complex{re: 0.0, im: 0.0}) {
+			w.set(if w == ZERO {
 			    &ONE
 			} else {
 			    &ZERO
 			});
 		    },
-		    INSTR_READ_REL => {
+		    /*INSTR_READ_REL => {
 			let count: usize = Equation::decode_value(instrs, &mut i);
 			w.set(&store[store_count - count]);
-		    },
+		    },*/
 		    INSTR_STACK_SUB => {
 			let count: usize = Equation::decode_value(instrs, &mut i);
 			store_count -= count;
@@ -1225,7 +1691,7 @@ impl Equation {
 			    w.set(&consts[index]);
 			} else {
 			    // variable
-			    //let index: usize = decode_var(instr, self.instructions, &mut i);
+			    //let index: usize = Equation::decode_var(instr, self.instructions, &mut i);
 			}
 		    },
 		}
@@ -1406,7 +1872,6 @@ impl Equation {
 	    },
 	    _ => {},
 	}
-	//println!("{} {}", start_index, end_index);
 	return match symbol_type {
 	    SYMBOL_TYPE_NUMBER | SYMBOL_TYPE_LETTER | SYMBOL_TYPE_SYMBOL => {
 		let start: usize = graphemes[start_index].0;
@@ -1443,7 +1908,7 @@ impl Equation {
     }
     fn is_symbol_str(string: &str) -> bool {
 	return match string {
-	    "+" | "-" | "*" | "/" | "**" | "^" | "(" | ")" | "," | "#" | "==" | "!=" | ">" | "<" | ">=" | "<=" | "&" | "|" | "~" | "@" | "=" | ";" | "->" | ":" => {
+	    "+" | "-" | "*" | "/" | "**" | "^" | "(" | ")" | "," | "#" | "==" | "!=" | ">" | "<" | ">=" | "<=" | "&" | "|" | "~" | "@" | "=" | ";" | "=>" | ":" | "{" | "}" | "[" | "]" | "$" | "->" => {
 		true
 	    }
 	    _ => {
@@ -1471,13 +1936,14 @@ impl Equation {
 	}
 	return true;
     }
+    // deprecated, change to is result value previous.
     fn prefix_or_infix_op(tokens: &VecDeque<Token>) -> bool {
 	if tokens.len() == 0 {
 	    return true;
 	} else {
 	    let token: &Token = tokens.back().unwrap();
 	    return match token {
-		Token::RightParen | Token::RightBracket | Token::RightCurly | Token::Const{..} | Token::Var{..} => false,
+		Token::RightParen | Token::RightBracket | Token::RightCurly | Token::Const{..} | Token::Var{..} | Token::Name{..} => false,
 		_ => true,
 	    };
 	}
@@ -1485,7 +1951,7 @@ impl Equation {
     fn pop_ops_and_control<'a>(op_stack: &mut Vec<Token<'a>>, instr_tokens: &mut VecDeque<Token<'a>>, op_stack_infix_op_prec: &mut Vec<usize>) {
 	while op_stack.len() > 0 && {
 	    let top_token: &Token = op_stack.last().unwrap();
-	    !top_token.is_left_group() && !top_token.is_def()
+	    !top_token.is_left_group() && !top_token.is_no_arg_or_arg_def()
 	} {
 	    let op: Token = op_stack.pop().unwrap();
 	    match &op {
@@ -1497,7 +1963,6 @@ impl Equation {
 			    // always the case.
 			    *index_of_token_placeholder = instr_tokens_len;
 			}
-			//instr_tokens[*index_of_token_jump_if_not].index_of_token_placeholder = instr_tokens.len();
 			instr_tokens.push_back(Token::new_placeholder());
 		    }
 		},
@@ -1508,7 +1973,6 @@ impl Equation {
 			// always the case.
 			*index_of_token_placeholder = instr_tokens_len;
 		    }
-		    //instr_tokens[*index_of_token_jump].index_of_token_placeholder = instr_tokens.len();
 		    instr_tokens.push_back(Token::new_placeholder());
 		},
 		Token::PrefixOp{..} | Token::InfixOp{..} | Token::PostfixOp{..} => {
