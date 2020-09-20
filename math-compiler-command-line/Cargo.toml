@@ -1,5 +1,5 @@
 [package]
-name = "math-compiler-command-line"
+name = "complex_calc"
 version = "0.1.0"
 authors = ["Ethan Fisher <fivemileview@gmail.com>"]
 edition = "2018"
@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 unicode-segmentation = "1.1.0"
+derivative = "2.1.1"
