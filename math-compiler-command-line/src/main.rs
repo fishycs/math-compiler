@@ -13,7 +13,6 @@ use std::time::SystemTime;
 
 /*
 TODO:
-- make instrs a vecdeque not a vec
 - add defs or funcs to be able to have numbers, but not as char 0.
 */
 
@@ -39,7 +38,7 @@ fn main() {
 		    let result: Complex = equ.eval().unwrap();
 		    if DEBUG {
 			let now = SystemTime::now();
-			for i in 0..65536 {
+			for _i in 0..65536 {
 			    equ.eval().unwrap();
 			}
 			let time = now.elapsed().unwrap().as_micros();
